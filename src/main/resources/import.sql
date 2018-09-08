@@ -1,0 +1,1 @@
+insert into customers(customer_id, cash, username, password) values (1 , 1000, 'root', 'root');
