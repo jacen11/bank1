@@ -3,6 +3,5 @@
 
 <@c.page>
 Добавление нового клиента
-    <div>${message?ifExists}</div>
     <@l.login "/registration" />
 </@c.page>

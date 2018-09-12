@@ -12,6 +12,7 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 @Controller
 public class CustomerController {
@@ -20,6 +21,11 @@ public class CustomerController {
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
+    }
+
+    @GetMapping("/")
+    public String greeting(Map<String, Object> model) {
+        return "transfer";
     }
 
     @GetMapping("/transfer")

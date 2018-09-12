@@ -4,5 +4,5 @@
 <@c.page>
 Страница для входа
     <@l.login "/login" />
-<a href="/registration">Add new user</a>
+<a href="/registration">Добавить нового пользователя</a>
 </@c.page>
