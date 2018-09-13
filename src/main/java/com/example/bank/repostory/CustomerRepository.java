@@ -13,8 +13,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> , User
 
     @Override
     default Customer loadUserByUsername(String s) throws UsernameNotFoundException {
-        return findByUsername(s).orElseThrow(() -> new UsernameNotFoundException(s));
+        return findByUsername(s);
     }
 
-    Optional<Customer> findByUsername(String username);
+   Customer findByUsername(String username);
 }

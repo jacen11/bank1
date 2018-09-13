@@ -5,12 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 @Entity
@@ -24,7 +22,6 @@ public class Customer implements UserDetails {
     private Long id;
     private String username;
     private String password;
-   // private boolean active;
 
     @Column(name = "cash", nullable = true)
     private BigDecimal cash;

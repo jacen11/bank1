@@ -1,1 +1,1 @@
-insert into customers(customer_id, cash, username, password) values (1 , 1000, 'root', 'root');
+insert into customers(customer_id, cash, username, password) values (1 , 1000, '0123456789', '0123456789');
