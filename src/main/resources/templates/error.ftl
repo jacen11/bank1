@@ -2,5 +2,5 @@
 
 <@c.page>
 <p>${message?ifExists}</p>
-нет пользователя
+ошибка
 </@c.page>

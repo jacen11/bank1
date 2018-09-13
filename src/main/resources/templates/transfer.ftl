@@ -23,7 +23,7 @@
         width: 300px;
     }
 </style>
-
+<a href="/generation">Получить Json со всеми транзакциями</a>
 <div>
     <@l.logout />
 </div>
