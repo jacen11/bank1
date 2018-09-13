@@ -11,10 +11,10 @@
            class="transfer"/>
     <input required pattern="^[0-9]+$" name="amount" placeholder="Введите сумму (любое положительное число)"
            class="transfer">
-    <#--<select name="select">-->
-        <#--<option value="bank_1">Банк 1</option>-->
-        <#--<option value="bank_2">Банк 2</option>-->
-    <#--</select>-->
+    <select name="select">
+        <option value="bank_1">Банк 1</option>
+        <option value="bank_2">Банк 2</option>
+    </select>
     <button type="submit">Перевести</button>
 </form>
 
