@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,6 +23,9 @@ public class Customer implements UserDetails {
     private Long id;
     private String username;
     private String password;
+
+    @OneToMany(mappedBy = "customer")
+    private List<BankAccount> accounts;
 
     @Column(name = "cash", nullable = true)
     private BigDecimal cash;

@@ -18,18 +18,26 @@ public class MyTransaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "transaction_id", unique = true, nullable = false)
     private Long id;
-    private Customer customer;
-    private Customer customerTo;
+
+    @JoinColumn(name = "account_from")
+    @ManyToOne
+    private BankAccount accountFrom;
+
+    @JoinColumn(name = "account_to")
+    @ManyToOne
+    private BankAccount accountTo;
+
     private BigDecimal cash;
+
     private LocalDateTime dateTime;
 
     public MyTransaction() {
     }
 
-    public MyTransaction(Customer customer, Customer customerTo, BigDecimal cash) {
-        this.customer = customer;
-        this.customerTo = customerTo;
+    public MyTransaction(BankAccount accountFrom, BankAccount accountTo, BigDecimal cash) {
+        this.accountFrom = accountFrom;
+        this.accountTo = accountTo;
         this.cash = cash;
-        dateTime=LocalDateTime.now();
+        dateTime = LocalDateTime.now();
     }
 }

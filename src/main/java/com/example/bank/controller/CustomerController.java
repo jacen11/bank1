@@ -1,7 +1,9 @@
 package com.example.bank.controller;
 
+import com.example.bank.entity.BankAccount;
 import com.example.bank.entity.Customer;
 import com.example.bank.entity.MyTransaction;
+import com.example.bank.repostory.BankAccountRepository;
 import com.example.bank.repostory.CustomerRepository;
 import com.example.bank.repostory.MyTransactionRepo;
 import com.example.bank.service.CustomerService;
@@ -20,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -31,6 +34,8 @@ public class CustomerController {
     private CustomerRepository customerRepository;
     @Autowired
     private MyTransactionRepo myTransactionRepo;
+    @Autowired
+    private BankAccountRepository bankAccountRepository;
 
     public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
@@ -38,7 +43,7 @@ public class CustomerController {
 
     @GetMapping("/")
     public String greeting(Map<String, Object> model) {
-        return "transfer";
+        return "bankAccounts";
     }
 
     @GetMapping("/transfer")
@@ -48,28 +53,59 @@ public class CustomerController {
 
 //    @PostMapping("/transfer")
 //    //@PreAuthorize("hasRole('USER')")
-//    public View transfer(@AuthenticationPrincipal Customer customer, Long customerTo, BigDecimal amount) {
-//        customerService.transfer(customer, customerTo, amount);
+//    public View transfer(@AuthenticationPrincipal Customer accountFrom, Long customerTo, BigDecimal amount) {
+//        customerService.transfer(accountFrom, customerTo, amount);
 //        return new RedirectView("/transfer");
+//    }
+
+    @PostMapping("/bankAccounts")
+    public String createBankAccount(
+            @AuthenticationPrincipal Customer user,
+            @RequestParam String nameAccount,
+            Map<String, Object> model
+    ) {
+        BankAccount bankAccount = new BankAccount(user, nameAccount);
+        //user.getAccounts().add(bankAccount);
+        bankAccountRepository.save(bankAccount);
+
+//        List<BankAccount> bankAccounts = user.getAccounts().add(bankAccount);
+//        user.setAccounts();
+
+        model.put("messages", "создание счета");
+
+        return "bankAccounts";
+    }
+
+//    @GetMapping("/bankAccounts")
+//    public String bankAccount(
+//            @AuthenticationPrincipal Customer user,
+//            Map<String, Object> model
+//    ) {
+//       Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+//        model.put("bankAccounts", bankAccounts);
+//
+//        return "bankAccounts";
 //    }
 
     @PostMapping("/transfer")
     public String add(
             @AuthenticationPrincipal Customer user,
-            @RequestParam String customerTo,
+            @RequestParam Long accountTo,
             @RequestParam BigDecimal amount, Map<String, Object> model
     ) {
 
-        if (customerRepository.loadUserByUsername(customerTo) == null) {
-            model.put("message", customerTo);
-            return "redirect:/error";
-        }
-
-        MyTransaction myTransaction = new MyTransaction(user, customerRepository.loadUserByUsername(customerTo), amount);
-
-        myTransactionRepo.save(myTransaction);
-        Iterable<MyTransaction> myTransactions = myTransactionRepo.findAll();
-        model.put("myTransactions", myTransactions);
+//        if (customerRepository.loadUserByUsername(customerTo) == null) {
+//            model.put("message", customerTo);
+//            return "redirect:/error";
+//        }
+//        if (user.getAccounts().stream().map(Account::getId).anyMatch(accountTo::equals)) {
+//            customerService.transfer();
+//        }
+//        MyTransaction myTransaction = new MyTransaction(user, customerRepository.loadUserByUsername(customerTo), amount);
+//
+//        myTransactionRepo.save(myTransaction);
+//        Iterable<MyTransaction> myTransactions = myTransactionRepo.findAll();
+//        model.put("myTransactions", myTransactions);
         return "redirect:/transfer";
     }
 
@@ -85,23 +121,23 @@ public class CustomerController {
         Iterable<MyTransaction> myTransactions = myTransactionRepo.findAll();
 
 
-        myTransactions.forEach(myTransaction -> {
-
-            try {
-                generator.writeStartObject();
-                generator.writeStringField("Имя отправителя", myTransaction.getCustomer().getUsername());
-                generator.writeStringField("Имя получателя", myTransaction.getCustomerTo().getUsername());
-                generator.writeStringField("Дата перевода", myTransaction.getDateTime().toString());
-                generator.writeNumberField("Сумма", myTransaction.getCash());
-                generator.writeEndObject();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        });
-
-
-        generator.close();
+//        myTransactions.forEach(myTransaction -> {
+//
+//            try {
+//                generator.writeStartObject();
+//                generator.writeStringField("Имя отправителя", myTransaction.getAccountFrom().getUsername());
+//                generator.writeStringField("Имя получателя", myTransaction.getCustomerTo().getUsername());
+//                generator.writeStringField("Дата перевода", myTransaction.getDateTime().toString());
+//                generator.writeNumberField("Сумма", myTransaction.getCash());
+//                generator.writeEndObject();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//        });
+//
+//
+//        generator.close();
         return "generation";
     }
 

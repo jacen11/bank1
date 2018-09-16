@@ -1,9 +1,7 @@
 package com.example.bank.service;
 
-import com.example.bank.domain.TransactionStatus;
-import com.example.bank.entity.Customer;
+import com.example.bank.entity.BankAccount;
 import com.example.bank.repostory.CustomerRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -24,7 +22,7 @@ public class InternalCustomerService implements CustomerService {
 
     @Transactional
     @Override
-    public void transfer(Customer customerFrom, Long customerIdTo, BigDecimal amount) {
+    public void transfer(BankAccount customerFrom, Long customerIdTo, BigDecimal amount) {
 //        BigDecimal from = customerFrom.getCash();
 //        customerFrom.setCash(from.subtract(amount));
 //        customerTo.setCash(customerTo.getCash().add(amount));

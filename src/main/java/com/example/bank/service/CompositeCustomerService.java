@@ -1,16 +1,13 @@
 package com.example.bank.service;
 
-import com.example.bank.entity.Customer;
+import com.example.bank.entity.BankAccount;
 import com.example.bank.repostory.CustomerRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Collection;
-import java.util.Optional;
 
 @Service
 @Primary
@@ -37,17 +34,20 @@ public class CompositeCustomerService implements CustomerService {
      * Если получатель является клиентом нашего банка, то переводим деньги внутри собственной системы.
      * <p>Иначе, переводим во внешние банки
      *
-     * @param customerFrom клиент-отправитель
-     * @param id           идентикатор получателя
+     * @param accountFrom клиент-отправитель
+     * @param accountIdTo           идентикатор получателя
      * @param amount       сумма перевода
      */
     @Override
-    public void transfer(Customer customerFrom, Long id, BigDecimal amount) {
-        boolean exists = customerRepository.existsById(id);
-        if (exists) {
-            internalCustomerService.transfer(customerFrom, id, amount);
-            return;
+    public void transfer(BankAccount accountFrom, Long accountIdTo, BigDecimal amount) {
+        String otherBankId = accountIdTo.toString().substring(0, 2);
+        if (BankAccount.bankId.equalsIgnoreCase(otherBankId)) {
+            internalCustomerService.transfer(accountFrom, accountIdTo, amount);
         }
-        externalCustomerServices.forEach(service -> service.transfer(customerFrom, id, amount));
+        externalCustomerServices
+                .stream()
+                .filter(externalCustomerService ->externalCustomerService.getBankId().equalsIgnoreCase(otherBankId))
+                .findAny()
+                .ifPresent(service -> service.transfer(accountFrom, accountIdTo, amount));
     }
 }
