@@ -31,6 +31,9 @@ public class MyTransaction {
 
     private LocalDateTime dateTime;
 
+    private String comment;
+
+
     public MyTransaction() {
     }
 

@@ -1,6 +1,6 @@
 <#macro login path>
 <form action="${path}" method="post">
-    <div><label> Имя (10 цифр) : <input type="text" required pattern="[0-9]{10}" name="username"/> </label></div>
+    <div><label> Номер паспорта (10 цифр) : <input type="text" required pattern="[0-9]{10}" name="username"/> </label></div>
     <div><label> Пароль: <input type="password" name="password"/> </label></div>
     <#--<input type="hidden" name="_csrf" value="${_csrf.token}" />-->
     <div><input type="submit" value="Войти"/></div>

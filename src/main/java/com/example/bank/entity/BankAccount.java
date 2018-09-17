@@ -36,4 +36,8 @@ public class BankAccount {
         this.nameAccount = nameAccount;
         this.balance = BigDecimal.ZERO;
     }
+
+    public String getNumberBankAccount() {
+        return "07" + String.valueOf(id);
+    }
 }

@@ -43,7 +43,7 @@ public class CustomerController {
 
     @GetMapping("/")
     public String greeting(Map<String, Object> model) {
-        return "bankAccounts";
+        return "redirect:/bankAccounts";
     }
 
     @GetMapping("/transfer")
@@ -51,7 +51,7 @@ public class CustomerController {
         return new ModelAndView("transfer");
     }
 
-//    @PostMapping("/transfer")
+    //    @PostMapping("/transfer")
 //    //@PreAuthorize("hasRole('USER')")
 //    public View transfer(@AuthenticationPrincipal Customer accountFrom, Long customerTo, BigDecimal amount) {
 //        customerService.transfer(accountFrom, customerTo, amount);
@@ -61,37 +61,75 @@ public class CustomerController {
     @PostMapping("/bankAccounts")
     public String createBankAccount(
             @AuthenticationPrincipal Customer user,
-            @RequestParam String nameAccount,
+            @RequestParam(required = false) String nameAccount,
+            @RequestParam(required = false) Long deleteNameAccount,
             Map<String, Object> model
     ) {
-        BankAccount bankAccount = new BankAccount(user, nameAccount);
-        //user.getAccounts().add(bankAccount);
-        bankAccountRepository.save(bankAccount);
+        model.put("greeting", "Привет "+ user.getUsername());
 
-//        List<BankAccount> bankAccounts = user.getAccounts().add(bankAccount);
-//        user.setAccounts();
+        if (nameAccount != null && !nameAccount.isEmpty()) {
+            BankAccount bankAccount = new BankAccount(user, nameAccount);
+            bankAccountRepository.save(bankAccount);
+            model.put("success", "Cчет " + bankAccount.getNameAccount() + " успешно добавлен");
+        }
 
-        model.put("messages", "создание счета");
+        if (deleteNameAccount != null) {
+            BankAccount findBankAccount3 = bankAccountRepository.findBankAccountById(deleteNameAccount);
+            //model.put("message", deleteNameAccount.substring(1));
+            if (findBankAccount3 != null && findBankAccount3.getCustomer().getId().equals(user.getId())) {
+                model.put("success", "Cчет " + findBankAccount3.getNumberBankAccount() + " успешно удален");
+                bankAccountRepository.delete(findBankAccount3);
+            } else {
+                model.put("success", "Cчет " + deleteNameAccount + " не найден");
+            }
+        }
+
+        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+        model.put("bankAccounts", bankAccounts);
+        //model.put("message", "счет не найден");
+
+        //BankAccount findBankAccount2 = bankAccountRepository.findBankAccountByNumberBankAccount(deleteNameAccount);
+//        BankAccount findBankAccount3 = bankAccountRepository.findBankAccountById(deleteNameAccount);
+//        if (findBankAccount3 != null) {
+//           // user.getAccounts().remove(findBankAccount3);
+//        }
+
 
         return "bankAccounts";
     }
 
-//    @GetMapping("/bankAccounts")
-//    public String bankAccount(
+//    @PostMapping("/bankAccounts")
+//    public String deleteBankAccount(
 //            @AuthenticationPrincipal Customer user,
+//            @RequestParam String deleteNameAccount,
 //            Map<String, Object> model
 //    ) {
-//       Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
-//        model.put("bankAccounts", bankAccounts);
 //
+//       // BankAccount bankAccount = bankAccountRepository.findBankAccountById(deleteNameAccount);
+//       // user.getAccounts().remove(bankAccount);
 //        return "bankAccounts";
 //    }
+
+    @GetMapping("/bankAccounts")
+    public String bankAccount(
+            @AuthenticationPrincipal Customer user,
+            Map<String, Object> model
+    ) {
+        model.put("greeting", "Привет "+ user.getUsername());
+
+        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+        model.put("bankAccounts", bankAccounts);
+
+        return "bankAccounts";
+    }
 
     @PostMapping("/transfer")
     public String add(
             @AuthenticationPrincipal Customer user,
             @RequestParam Long accountTo,
-            @RequestParam BigDecimal amount, Map<String, Object> model
+            @RequestParam BigDecimal amount,
+            @RequestParam(required = false) String comment,
+            Map<String, Object> model
     ) {
 
 //        if (customerRepository.loadUserByUsername(customerTo) == null) {

@@ -7,14 +7,12 @@
     </div>
 
 <form method="post" action="/transfer">
-    <input name="customerTo" required pattern="[0-9]{10}" placeholder="Введите номер паспорта получателя (10 цифр)"
+    <input name="customerTo" required pattern="[0-9]{1,10}" placeholder="Введите номер счета получателя (1-10 цифр)"
            class="transfer"/>
     <input required pattern="^[0-9]+$" name="amount" placeholder="Введите сумму (любое положительное число)"
            class="transfer">
-    <select name="select">
-        <option value="bank_1">Банк 1</option>
-        <option value="bank_2">Банк 2</option>
-    </select>
+    <input  name="comment" placeholder="Введите сообщение получателю"
+           class="transfer">
     <button type="submit">Перевести</button>
 </form>
 
@@ -23,7 +21,8 @@
         width: 300px;
     }
 </style>
-<a href="/generation">Получить Json со всеми транзакциями</a>
+<div><a href="/generation">Получить Json со всеми транзакциями</a></div>
+<div><a href="/bankAccounts">Перейти к управлению счетами</a></div>
 <div>
     <@l.logout />
 </div>
