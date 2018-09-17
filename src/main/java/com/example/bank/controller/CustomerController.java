@@ -46,11 +46,6 @@ public class CustomerController {
         return "redirect:/bankAccounts";
     }
 
-    @GetMapping("/transfer")
-    public ModelAndView transfer() {
-        return new ModelAndView("transfer");
-    }
-
     //    @PostMapping("/transfer")
 //    //@PreAuthorize("hasRole('USER')")
 //    public View transfer(@AuthenticationPrincipal Customer accountFrom, Long customerTo, BigDecimal amount) {
@@ -123,6 +118,15 @@ public class CustomerController {
         return "bankAccounts";
     }
 
+    @GetMapping("/transfer")
+    public ModelAndView transfer( @AuthenticationPrincipal Customer user,Map<String, Object> model) {
+
+        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+        model.put("bankAccounts", bankAccounts);
+
+        return new ModelAndView("transfer");
+    }
+
     @PostMapping("/transfer")
     public String add(
             @AuthenticationPrincipal Customer user,
@@ -131,6 +135,8 @@ public class CustomerController {
             @RequestParam(required = false) String comment,
             Map<String, Object> model
     ) {
+        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+        model.put("bankAccounts", bankAccounts);
 
 //        if (customerRepository.loadUserByUsername(customerTo) == null) {
 //            model.put("message", customerTo);
