@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 @Entity
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
 @Setter
 public class BankAccount {
 
-    public static final String bankId = "07";
+    public static final String bankId = "57";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,6 +29,10 @@ public class BankAccount {
 
     private String nameAccount;
 
+
+    @OneToMany
+    private List<MyTransaction> transactions;
+
     public BankAccount() {
     }
 
@@ -38,6 +43,10 @@ public class BankAccount {
     }
 
     public String getNumberBankAccount() {
-        return "07" + String.valueOf(id);
+        return bankId + id;
+    }
+
+    public static boolean isInternal(Long id) {
+        return id.toString().startsWith(bankId);
     }
 }

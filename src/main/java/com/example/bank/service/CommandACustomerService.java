@@ -20,7 +20,7 @@ public class CommandACustomerService implements ExternalCustomerService {
 
 
     @Override
-    public void transfer(BankAccount customerFrom, Long id, BigDecimal amount) {
+    public void transfer(BankAccount customerFrom, Long id, BigDecimal amount, String comment) {
         Transfer transfer  = new Transfer();
         RequestEntity<Transfer> requestEntity = RequestEntity.post(URI.create("адрес банка")).body(transfer);
       //  TransferResponse  response = rest.exchange(requestEntity, TransferResponse.class);

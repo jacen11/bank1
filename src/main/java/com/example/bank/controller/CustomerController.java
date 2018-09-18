@@ -1,5 +1,6 @@
 package com.example.bank.controller;
 
+import com.example.bank.domain.Transfer;
 import com.example.bank.entity.BankAccount;
 import com.example.bank.entity.Customer;
 import com.example.bank.entity.MyTransaction;
@@ -13,8 +14,10 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -22,23 +25,23 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 public class CustomerController {
 
+
     private final CustomerService customerService;
 
-    @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
-    private MyTransactionRepo myTransactionRepo;
-    @Autowired
-    private BankAccountRepository bankAccountRepository;
+    private final MyTransactionRepo myTransactionRepo;
 
-    public CustomerController(CustomerService customerService) {
+    @Autowired
+    public CustomerController(CustomerService customerService, MyTransactionRepo myTransactionRepo) {
         this.customerService = customerService;
+        this.myTransactionRepo = myTransactionRepo;
     }
 
     @GetMapping("/")
@@ -60,7 +63,7 @@ public class CustomerController {
             @RequestParam(required = false) Long deleteNameAccount,
             Map<String, Object> model
     ) {
-        model.put("greeting", "Привет "+ user.getUsername());
+        model.put("greeting", "Привет " + user.getUsername());
 
         if (nameAccount != null && !nameAccount.isEmpty()) {
             BankAccount bankAccount = new BankAccount(user, nameAccount);
@@ -110,7 +113,7 @@ public class CustomerController {
             @AuthenticationPrincipal Customer user,
             Map<String, Object> model
     ) {
-        model.put("greeting", "Привет "+ user.getUsername());
+        model.put("greeting", "Привет " + user.getUsername());
 
         Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
         model.put("bankAccounts", bankAccounts);
@@ -119,7 +122,7 @@ public class CustomerController {
     }
 
     @GetMapping("/transfer")
-    public ModelAndView transfer( @AuthenticationPrincipal Customer user,Map<String, Object> model) {
+    public ModelAndView transfer(@AuthenticationPrincipal Customer user, Map<String, Object> model) {
 
         Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
         model.put("bankAccounts", bankAccounts);
@@ -130,38 +133,53 @@ public class CustomerController {
     @PostMapping("/transfer")
     public String add(
             @AuthenticationPrincipal Customer user,
-            @RequestParam Long accountTo,
-            @RequestParam BigDecimal amount,
-            @RequestParam(required = false) String comment,
-            Map<String, Object> model
+            @RequestBody Transfer transfer,
+            Map<String, Object>model
     ) {
+        List<BankAccount> accounts = user.getAccounts();
         Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
         model.put("bankAccounts", bankAccounts);
+
+
+        customerService.transfer(transfer);
+
+//        if (accountTo.substring(0, 1).equals("57")) {
+//            if (accountTo.substring(2).isEmpty() || bankAccountRepository.existsById(Integer.valueOf(accountTo.substring(2)))) {
+//                model.put("error", accountTo + " не найден");
+//            }
+//        }
+
 
 //        if (customerRepository.loadUserByUsername(customerTo) == null) {
 //            model.put("message", customerTo);
 //            return "redirect:/error";
 //        }
-//        if (user.getAccounts().stream().map(Account::getId).anyMatch(accountTo::equals)) {
-//            customerService.transfer();
+//        if (user.getAccounts().stream().map(BankAccount::getId).anyMatch(accountTo::equals)) {
+//            //customerService.transfer(user, accountTo,amount, comment);
 //        }
 //        MyTransaction myTransaction = new MyTransaction(user, customerRepository.loadUserByUsername(customerTo), amount);
 //
 //        myTransactionRepo.save(myTransaction);
 //        Iterable<MyTransaction> myTransactions = myTransactionRepo.findAll();
 //        model.put("myTransactions", myTransactions);
-        return "redirect:/transfer";
+        return "transfer";
     }
 
     //с помощью jackson
     @GetMapping("/generation")
-    public String generation(@AuthenticationPrincipal Customer user, Map<String, Object> model) throws IOException {
+    public String generation(@AuthenticationPrincipal Customer user, Long bankAccountId, Map<String, Object> model) throws IOException {
         JsonFactory factory = new JsonFactory();
 
         JsonGenerator generator = factory.createGenerator(
                 new File("Общий отчет " + LocalDate.now().toString() + ".json"), JsonEncoding.UTF8);
 
-
+        List<MyTransaction> transactions = user
+                .getAccounts()
+                .stream()
+                .filter(account -> account.getId().equals(bankAccountId))
+                .map(BankAccount::getTransactions)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
         Iterable<MyTransaction> myTransactions = myTransactionRepo.findAll();
 
 

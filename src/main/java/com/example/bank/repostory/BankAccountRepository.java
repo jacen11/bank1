@@ -12,6 +12,12 @@ public interface BankAccountRepository extends CrudRepository<BankAccount, Integ
     BankAccount findBankAccountById(Long s);
    // BankAccount findBankAccountByNumberBankAccount(String s);
 
+
+    default BankAccount findBankAccountById(String id) {
+        return findBankAccountById(id.substring(2));
+    }
+
+
     default void deleteAccount(BankAccount bankAccount){
         delete(bankAccount);
     }

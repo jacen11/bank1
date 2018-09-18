@@ -1,11 +1,13 @@
 package com.example.bank.service;
 
+import com.example.bank.domain.Transfer;
 import com.example.bank.entity.BankAccount;
 import com.example.bank.repostory.CustomerRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.Collection;
 
@@ -39,15 +41,15 @@ public class CompositeCustomerService implements CustomerService {
      * @param amount       сумма перевода
      */
     @Override
-    public void transfer(BankAccount accountFrom, Long accountIdTo, BigDecimal amount) {
-        String otherBankId = accountIdTo.toString().substring(0, 2);
+    public void transfer(Transfer transfer) {
+        String otherBankId = transfer.getToAccount().toString().substring(0, 2);
         if (BankAccount.bankId.equalsIgnoreCase(otherBankId)) {
-            internalCustomerService.transfer(accountFrom, accountIdTo, amount);
+            internalCustomerService.transfer(transfer);
         }
         externalCustomerServices
                 .stream()
                 .filter(externalCustomerService ->externalCustomerService.getBankId().equalsIgnoreCase(otherBankId))
                 .findAny()
-                .ifPresent(service -> service.transfer(accountFrom, accountIdTo, amount));
+                .ifPresent(service -> service.transfer(transfer));
     }
 }
