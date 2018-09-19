@@ -38,10 +38,13 @@ public class CustomerController {
 
     private final MyTransactionRepo myTransactionRepo;
 
+    private final BankAccountRepository bankAccountRepository;
+
     @Autowired
-    public CustomerController(CustomerService customerService, MyTransactionRepo myTransactionRepo) {
+    public CustomerController(CustomerService customerService, MyTransactionRepo myTransactionRepo, BankAccountRepository bankAccountRepository) {
         this.customerService = customerService;
         this.myTransactionRepo = myTransactionRepo;
+        this.bankAccountRepository = bankAccountRepository;
     }
 
     @GetMapping("/")
@@ -82,7 +85,7 @@ public class CustomerController {
             }
         }
 
-        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+        Iterable<BankAccount> bankAccounts = user.getAccounts();
         model.put("bankAccounts", bankAccounts);
         //model.put("message", "счет не найден");
 
@@ -115,7 +118,7 @@ public class CustomerController {
     ) {
         model.put("greeting", "Привет " + user.getUsername());
 
-        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+        Iterable<BankAccount> bankAccounts = user.getAccounts();
         model.put("bankAccounts", bankAccounts);
 
         return "bankAccounts";
@@ -124,7 +127,7 @@ public class CustomerController {
     @GetMapping("/transfer")
     public ModelAndView transfer(@AuthenticationPrincipal Customer user, Map<String, Object> model) {
 
-        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+        Iterable<BankAccount> bankAccounts = user.getAccounts();
         model.put("bankAccounts", bankAccounts);
 
         return new ModelAndView("transfer");
@@ -136,8 +139,7 @@ public class CustomerController {
             @RequestBody Transfer transfer,
             Map<String, Object>model
     ) {
-        List<BankAccount> accounts = user.getAccounts();
-        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+        List<BankAccount> bankAccounts = user.getAccounts();
         model.put("bankAccounts", bankAccounts);
 
 
