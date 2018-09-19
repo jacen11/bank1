@@ -16,16 +16,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomerRepository customerRepository;
 
-//    @Autowired
-//    public SecurityConfiguration(@Qualifier("customerRepository") UserDetailsService customerRepository) {
-//        this.customerRepository = customerRepository;
-//    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "/registration").permitAll()
+                .antMatchers("/", "/registration", "/static/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()                                       //временно
