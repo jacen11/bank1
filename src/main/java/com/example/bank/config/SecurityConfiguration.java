@@ -26,8 +26,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()                                       //временно
-                .formLogin().disable()//.loginPage("/login").permitAll()
-//                .and()
+                .formLogin().loginPage("/login").permitAll()//.disable()//.loginPage("/login").permitAll()
+                .and()
                 .logout()
                 ;
     }
