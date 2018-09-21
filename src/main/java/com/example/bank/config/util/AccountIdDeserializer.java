@@ -18,5 +18,4 @@ public class AccountIdDeserializer extends JsonDeserializer<AccountId> {
         return AccountId.fromIdWithBankId(rawValue);
     }
 
-
 }

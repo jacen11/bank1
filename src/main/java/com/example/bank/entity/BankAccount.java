@@ -7,13 +7,16 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
 @Table(name = "accounts")
 @Getter
 @Setter
+@NamedEntityGraph(name = "abc", includeAllAttributes = true)
 public class BankAccount {
 
 
@@ -29,12 +32,23 @@ public class BankAccount {
     private String nameAccount;
 
 
-    @OneToMany
-    private List<AccountTransaction> transactions;
+    @OneToMany(mappedBy = "accountFrom", cascade = CascadeType.ALL)
+    private Set<AccountTransaction> fromTransactions;
 
-    public BankAccount() {
+    @OneToMany(mappedBy = "accountTo", cascade = CascadeType.ALL)
+    private Set<AccountTransaction> toTransactions;
+
+    public List<AccountTransaction> getTransactions() {
+        List<AccountTransaction> transactions = new ArrayList<>();
+        if (fromTransactions != null) {
+            transactions.addAll(fromTransactions);
+        }
+        if (toTransactions != null) {
+            transactions.addAll(toTransactions);
+        }
+        return transactions;
     }
 
-
-
+    //    public BankAccount() {
+//    }
 }

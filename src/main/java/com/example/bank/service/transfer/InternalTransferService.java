@@ -1,17 +1,19 @@
 package com.example.bank.service.transfer;
 
 import com.example.bank.domain.Transfer;
+import com.example.bank.entity.AccountTransaction;
 import com.example.bank.entity.BankAccount;
 import com.example.bank.repostory.BankAccountRepository;
 import com.example.bank.repostory.CustomerRepository;
+import com.example.bank.repostory.MyTransactionRepo;
 import com.example.bank.service.transfer.exception.AccountNotFoundTransferException;
 import com.example.bank.service.transfer.exception.CustomerNotAvailableTransferException;
 import com.example.bank.service.transfer.exception.NotEnoughCashTranferException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
 import java.math.BigDecimal;
+import java.util.Set;
 
 import static com.example.bank.service.transfer.TransferService.INTERNAL_CUSTOMER_SERVICE;
 import static java.util.Objects.requireNonNull;
@@ -24,9 +26,12 @@ public class InternalTransferService implements TransferService {
 
     private final CustomerRepository customerRepository;
 
-    public InternalTransferService(BankAccountRepository bankAccountRepository, CustomerRepository customerRepository) {
+    private final MyTransactionRepo myTransactionRepo;
+
+    public InternalTransferService(BankAccountRepository bankAccountRepository, CustomerRepository customerRepository, MyTransactionRepo myTransactionRepo) {
         this.bankAccountRepository = requireNonNull(bankAccountRepository);
         this.customerRepository = requireNonNull(customerRepository);
+        this.myTransactionRepo = myTransactionRepo;
     }
 
     @Transactional
@@ -49,10 +54,25 @@ public class InternalTransferService implements TransferService {
         if (!customerRepository.availableByAccountId(transfer.getToAccount())) {
             throw new CustomerNotAvailableTransferException(transfer.getToAccount());
         }
+        AccountTransaction accountTransaction = new AccountTransaction(fromAccount, toAccount, transfer.getAmount());
+
         fromAccount.setBalance(fromBalance.subtract(transfer.getAmount()));
+
+        Set<AccountTransaction> fromAccountTransactions = fromAccount.getFromTransactions();
+        fromAccountTransactions.add(accountTransaction);
+        fromAccount.setFromTransactions(fromAccountTransactions);
+
         bankAccountRepository.save(fromAccount);
 
         toAccount.setBalance(toAccount.getBalance().add(transfer.getAmount()));
+
+//        List<AccountTransaction> toAccountTransactions = toAccount.getTransactions();
+//        toAccountTransactions.add(accountTransaction);
+//        toAccount.setTransactions(toAccountTransactions);
+
         bankAccountRepository.save(toAccount);
+
+
+
     }
 }

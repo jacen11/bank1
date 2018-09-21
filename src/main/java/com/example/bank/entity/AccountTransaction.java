@@ -20,11 +20,11 @@ public class AccountTransaction {
     private Long id;
 
     @JoinColumn(name = "account_from")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private BankAccount accountFrom;
 
     @JoinColumn(name = "account_to")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private BankAccount accountTo;
 
     private BigDecimal cash;
