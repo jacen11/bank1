@@ -21,14 +21,26 @@ public class Customer implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "customer_id", unique = true, nullable = false)
     private Long id;
+
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
+
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "customer")
+    @Column(name = "account_not_expired")
+    private boolean accountNotExpired = true;
+    @Column(name = "account_not_locked")
+    private boolean accountNotLocked = true;
+    @Column(name = "enabled")
+    private boolean enabled = true;
+
+    @OneToMany
+    @JoinColumn(referencedColumnName = "customer_id")
     private List<BankAccount> accounts;
 
-    @Column(name = "cash", nullable = true)
-    private BigDecimal cash;
+//    @Column(name = "cash", nullable = true)
+//    private BigDecimal cash;
 
     @Override
     public String toString() {
@@ -59,12 +71,12 @@ public class Customer implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return accountNotExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return accountNotLocked;
     }
 
     @Override
@@ -74,6 +86,6 @@ public class Customer implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

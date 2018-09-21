@@ -1,14 +1,15 @@
 package com.example.bank.repostory;
 
-import com.example.bank.entity.Customer;
-import com.example.bank.entity.MyTransaction;
+import com.example.bank.entity.BankAccount;
+import com.example.bank.entity.AccountTransaction;
 import org.springframework.data.repository.CrudRepository;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.LocalDate;
 import java.util.List;
 
-public interface MyTransactionRepo extends CrudRepository<MyTransaction, Long> {
+public interface MyTransactionRepo extends CrudRepository<AccountTransaction, Long> {
 
-    List<MyTransaction> findByDateTimeBetween(LocalDateTime from, LocalDateTime to);
+    List<AccountTransaction> findByDateTimeBetween(LocalDate from, LocalDate to);
+    List<AccountTransaction> findAllByAccountTo (BankAccount bankAccount);
+
 }

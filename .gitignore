@@ -1,0 +1,35 @@
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/mvnw
+.mvn/
+mvnw
+mvnw.cmd
+out/
+output.json
+
+"\320\236\320\261\321\211\320\270\320\271 \320\276\321\202\321\207\320\265\321\202 2018-09-13.json"
+/Общий отчет 2018-09-13.json
+/out/

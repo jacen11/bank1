@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "history")
 @Getter
 @Setter
-public class MyTransaction {
+public class AccountTransaction {
 
 
     @Id
@@ -34,13 +34,13 @@ public class MyTransaction {
     private String comment;
 
 
-    public MyTransaction() {
+    public AccountTransaction() {
     }
 
-    public MyTransaction(BankAccount accountFrom, BankAccount accountTo, BigDecimal cash) {
+    public AccountTransaction(BankAccount accountFrom, BankAccount accountTo, BigDecimal cash) {
         this.accountFrom = accountFrom;
         this.accountTo = accountTo;
         this.cash = cash;
-        dateTime = LocalDateTime.now();
+        this.dateTime = LocalDateTime.now();
     }
 }

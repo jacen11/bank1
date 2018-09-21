@@ -8,7 +8,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 @SpringBootApplication
-@EnableWebSecurity
 public class BankApplication {
 
     public static void main(String[] args) {

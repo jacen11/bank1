@@ -3,45 +3,31 @@ package com.example.bank.controller;
 import com.example.bank.domain.Transfer;
 import com.example.bank.entity.BankAccount;
 import com.example.bank.entity.Customer;
-import com.example.bank.entity.MyTransaction;
 import com.example.bank.repostory.BankAccountRepository;
-import com.example.bank.repostory.CustomerRepository;
 import com.example.bank.repostory.MyTransactionRepo;
-import com.example.bank.service.CustomerService;
-import com.fasterxml.jackson.core.JsonEncoding;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
+import com.example.bank.service.transfer.TransferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Controller
 public class CustomerController {
 
 
-    private final CustomerService customerService;
+    private final TransferService customerService;
 
     private final MyTransactionRepo myTransactionRepo;
 
     private final BankAccountRepository bankAccountRepository;
 
     @Autowired
-    public CustomerController(CustomerService customerService, MyTransactionRepo myTransactionRepo, BankAccountRepository bankAccountRepository) {
+    public CustomerController(TransferService customerService, MyTransactionRepo myTransactionRepo, BankAccountRepository bankAccountRepository) {
         this.customerService = customerService;
         this.myTransactionRepo = myTransactionRepo;
         this.bankAccountRepository = bankAccountRepository;
@@ -69,24 +55,26 @@ public class CustomerController {
         model.put("greeting", "Привет " + user.getUsername());
 
         if (nameAccount != null && !nameAccount.isEmpty()) {
-            BankAccount bankAccount = new BankAccount(user, nameAccount);
+            // FIXME: 19.09.2018 
+            BankAccount bankAccount = new BankAccount();
             bankAccountRepository.save(bankAccount);
             model.put("success", "Cчет " + bankAccount.getNameAccount() + " успешно добавлен");
         }
 
         if (deleteNameAccount != null) {
-            BankAccount findBankAccount3 = bankAccountRepository.findBankAccountById(deleteNameAccount);
+//            BankAccount findBankAccount3 = bankAccountRepository.findBankAccountById(deleteNameAccount);
             //model.put("message", deleteNameAccount.substring(1));
-            if (findBankAccount3 != null && findBankAccount3.getCustomer().getId().equals(user.getId())) {
-                model.put("success", "Cчет " + findBankAccount3.getNumberBankAccount() + " успешно удален");
-                bankAccountRepository.delete(findBankAccount3);
-            } else {
-                model.put("success", "Cчет " + deleteNameAccount + " не найден");
-            }
+            // FIXME: 19.09.2018 
+//            if (findBankAccount3 != null && findBankAccount3.getCustomer().getId().equals(user.getId())) {
+//                model.put("success", "Cчет " + findBankAccount3.getNumberBankAccount() + " успешно удален");
+//                bankAccountRepository.delete(findBankAccount3);
+//            } else {
+//                model.put("success", "Cчет " + deleteNameAccount + " не найден");
+//            }
         }
-
-        Iterable<BankAccount> bankAccounts = user.getAccounts();
-        model.put("bankAccounts", bankAccounts);
+//        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+//        //Iterable<BankAccount> bankAccounts = user.getAccounts();
+//        model.put("bankAccounts", bankAccounts);
         //model.put("message", "счет не найден");
 
         //BankAccount findBankAccount2 = bankAccountRepository.findBankAccountByNumberBankAccount(deleteNameAccount);
@@ -118,8 +106,8 @@ public class CustomerController {
     ) {
         model.put("greeting", "Привет " + user.getUsername());
 
-        Iterable<BankAccount> bankAccounts = user.getAccounts();
-        model.put("bankAccounts", bankAccounts);
+//        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+//        model.put("bankAccounts", bankAccounts);
 
         return "bankAccounts";
     }
@@ -127,8 +115,8 @@ public class CustomerController {
     @GetMapping("/transfer")
     public ModelAndView transfer(@AuthenticationPrincipal Customer user, Map<String, Object> model) {
 
-        Iterable<BankAccount> bankAccounts = user.getAccounts();
-        model.put("bankAccounts", bankAccounts);
+//        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+//        model.put("bankAccounts", bankAccounts);
 
         return new ModelAndView("transfer");
     }
@@ -139,8 +127,8 @@ public class CustomerController {
             @RequestBody Transfer transfer,
             Map<String, Object>model
     ) {
-        List<BankAccount> bankAccounts = user.getAccounts();
-        model.put("bankAccounts", bankAccounts);
+//        List<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+//        model.put("bankAccounts", bankAccounts);
 
 
         customerService.transfer(transfer);
@@ -168,21 +156,42 @@ public class CustomerController {
     }
 
     //с помощью jackson
+
+
+
+    @PostMapping("/generation")
+    public String generation(@AuthenticationPrincipal Customer user,
+                             @RequestParam LocalDate from,
+                             @RequestParam LocalDate to,
+                             @RequestParam String bankAccount,
+                             Map<String, Object> model){
+//        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+//        model.put("bankAccounts", bankAccounts);
+
+      // myTransactionRepo.findAllByAccount(bankAccountRepository.)
+        return "generation";
+    }
+
     @GetMapping("/generation")
-    public String generation(@AuthenticationPrincipal Customer user, Long bankAccountId, Map<String, Object> model) throws IOException {
-        JsonFactory factory = new JsonFactory();
+    public String openGeneration(@AuthenticationPrincipal Customer user,
+                             Map<String, Object> model) throws IOException {
+//        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
+//        model.put("bankAccounts", bankAccounts);
+//        JsonFactory factory = new JsonFactory();
+//
+//        JsonGenerator generator = factory.createGenerator(
+//                new File("Общий отчет " + LocalDate.now().toString() + ".json"), JsonEncoding.UTF8);
 
-        JsonGenerator generator = factory.createGenerator(
-                new File("Общий отчет " + LocalDate.now().toString() + ".json"), JsonEncoding.UTF8);
+//        List<MyTransaction> transactions = user
+//                .getAccounts()
+//                .stream()
+//                .filter(account -> account.getId().equals(bankAccountId))
+//                .map(BankAccount::getTransactions)
+//                .flatMap(Collection::stream)
+//                .collect(Collectors.toList());
+//        Iterable<MyTransaction> myTransactions = myTransactionRepo.findAll();
 
-        List<MyTransaction> transactions = user
-                .getAccounts()
-                .stream()
-                .filter(account -> account.getId().equals(bankAccountId))
-                .map(BankAccount::getTransactions)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
-        Iterable<MyTransaction> myTransactions = myTransactionRepo.findAll();
+
 
 
 //        myTransactions.forEach(myTransaction -> {

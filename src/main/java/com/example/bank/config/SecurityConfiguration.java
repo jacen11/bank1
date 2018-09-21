@@ -19,21 +19,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .httpBasic()
+                .and()
                 .authorizeRequests()
                 .antMatchers("/", "/registration", "/static/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()                                       //временно
-                .formLogin().loginPage("/login").permitAll()
-                .and()
+                .formLogin().disable()//.loginPage("/login").permitAll()
+//                .and()
                 .logout()
-                .permitAll();
+                ;
     }
 
     //customerRepository
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customerRepository)
-                .passwordEncoder(NoOpPasswordEncoder.getInstance());
+        auth
+                .userDetailsService(customerRepository)
+                .passwordEncoder(NoOpPasswordEncoder.getInstance())
+                ;
     }
 }

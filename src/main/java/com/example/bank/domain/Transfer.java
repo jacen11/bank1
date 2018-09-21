@@ -9,8 +9,8 @@ public class Transfer {
 
     private Long id;
     private BigDecimal amount;
-    private Long fromAccount;
-    private Long toAccount;
+    private AccountId fromAccount;
+    private AccountId toAccount;
     private Currency currency;
 
 }

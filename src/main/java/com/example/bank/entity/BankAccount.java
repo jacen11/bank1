@@ -1,7 +1,9 @@
 package com.example.bank.entity;
 
+import com.example.bank.domain.AccountId;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -14,39 +16,25 @@ import java.util.List;
 @Setter
 public class BankAccount {
 
-    public static final String bankId = "57";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "account_id", unique = true, nullable = false)
-    private Long id;
+    @Type(type = "com.example.bank.entity.type.AccountIdType")
+    private AccountId id;
 
     private BigDecimal balance;
 
-    @ManyToOne()
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
-
+    @Column(name = "name_account", nullable = false)
     private String nameAccount;
 
 
     @OneToMany
-    private List<MyTransaction> transactions;
+    private List<AccountTransaction> transactions;
 
     public BankAccount() {
     }
 
-    public BankAccount(Customer customer, String nameAccount) {
-        this.customer = customer;
-        this.nameAccount = nameAccount;
-        this.balance = BigDecimal.ZERO;
-    }
 
-    public String getNumberBankAccount() {
-        return bankId + id;
-    }
 
-    public static boolean isInternal(Long id) {
-        return id.toString().startsWith(bankId);
-    }
 }
