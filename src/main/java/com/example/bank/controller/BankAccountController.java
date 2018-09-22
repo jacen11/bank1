@@ -3,9 +3,7 @@ package com.example.bank.controller;
 import com.example.bank.domain.AccountId;
 import com.example.bank.entity.BankAccount;
 import com.example.bank.repostory.BankAccountRepository;
-import com.example.bank.repostory.MyTransactionRepo;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -17,8 +15,6 @@ public class BankAccountController {
 
     private final BankAccountRepository bankAccountRepository;
 
-    @Autowired
-    private MyTransactionRepo transactionRepo;
 
     public BankAccountController(BankAccountRepository bankAccountRepository) {
         this.bankAccountRepository = bankAccountRepository;

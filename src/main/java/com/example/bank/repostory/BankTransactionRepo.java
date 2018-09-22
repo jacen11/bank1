@@ -6,12 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-public interface MyTransactionRepo extends CrudRepository<AccountTransaction, Long> {
+public interface BankTransactionRepo extends CrudRepository<AccountTransaction, Long> {
 
-    List<AccountTransaction> findByDateTimeBetween(LocalDate from, LocalDate to);
+    List<AccountTransaction> findByDateTimeBetween(LocalDateTime from, LocalDateTime to);
     List<AccountTransaction> findAllByAccountTo (BankAccount bankAccount);
 
     @Query("select a from #{#entityName} a where a.accountFrom = :bankAccount or a.accountTo = :bankAccount")

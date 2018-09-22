@@ -5,7 +5,7 @@ import com.example.bank.entity.AccountTransaction;
 import com.example.bank.entity.BankAccount;
 import com.example.bank.repostory.BankAccountRepository;
 import com.example.bank.repostory.CustomerRepository;
-import com.example.bank.repostory.MyTransactionRepo;
+import com.example.bank.repostory.BankTransactionRepo;
 import com.example.bank.service.transfer.exception.AccountNotFoundTransferException;
 import com.example.bank.service.transfer.exception.CustomerNotAvailableTransferException;
 import com.example.bank.service.transfer.exception.NotEnoughCashTranferException;
@@ -26,9 +26,9 @@ public class InternalTransferService implements TransferService {
 
     private final CustomerRepository customerRepository;
 
-    private final MyTransactionRepo myTransactionRepo;
+    private final BankTransactionRepo myTransactionRepo;
 
-    public InternalTransferService(BankAccountRepository bankAccountRepository, CustomerRepository customerRepository, MyTransactionRepo myTransactionRepo) {
+    public InternalTransferService(BankAccountRepository bankAccountRepository, CustomerRepository customerRepository, BankTransactionRepo myTransactionRepo) {
         this.bankAccountRepository = requireNonNull(bankAccountRepository);
         this.customerRepository = requireNonNull(customerRepository);
         this.myTransactionRepo = myTransactionRepo;
@@ -58,7 +58,10 @@ public class InternalTransferService implements TransferService {
 
         fromAccount.setBalance(fromBalance.subtract(transfer.getAmount()));
 
+
         Set<AccountTransaction> fromAccountTransactions = fromAccount.getFromTransactions();
+
+
         fromAccountTransactions.add(accountTransaction);
         fromAccount.setFromTransactions(fromAccountTransactions);
 
@@ -66,9 +69,9 @@ public class InternalTransferService implements TransferService {
 
         toAccount.setBalance(toAccount.getBalance().add(transfer.getAmount()));
 
-//        List<AccountTransaction> toAccountTransactions = toAccount.getTransactions();
-//        toAccountTransactions.add(accountTransaction);
-//        toAccount.setTransactions(toAccountTransactions);
+        Set<AccountTransaction> toAccountTransactions = toAccount.getToTransactions();
+        toAccountTransactions.add(accountTransaction);
+        toAccount.setToTransactions(toAccountTransactions);
 
         bankAccountRepository.save(toAccount);
 

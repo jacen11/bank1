@@ -4,7 +4,6 @@ import com.example.bank.domain.Transfer;
 import com.example.bank.entity.Customer;
 import com.example.bank.service.transfer.TransferService;
 import com.example.bank.service.transfer.exception.TransferException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -33,4 +32,5 @@ public class TransferController {
     public String exceptionHandler(TransferException ex) {
         return "error";
     }
+
 }
