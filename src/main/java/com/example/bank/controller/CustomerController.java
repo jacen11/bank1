@@ -63,7 +63,7 @@ public class CustomerController {
 
         if (deleteNameAccount != null) {
 //            BankAccount findBankAccount3 = bankAccountRepository.findBankAccountById(deleteNameAccount);
-            //model.put("message", deleteNameAccount.substring(1));
+            //model.put("bankAccount", deleteNameAccount.substring(1));
             // FIXME: 19.09.2018 
 //            if (findBankAccount3 != null && findBankAccount3.getCustomer().getId().equals(user.getId())) {
 //                model.put("success", "Cчет " + findBankAccount3.getNumberBankAccount() + " успешно удален");
@@ -75,7 +75,7 @@ public class CustomerController {
 //        Iterable<BankAccount> bankAccounts = bankAccountRepository.findAllByCustomer(user);
 //        //Iterable<BankAccount> bankAccounts = user.getAccounts();
 //        model.put("bankAccounts", bankAccounts);
-        //model.put("message", "счет не найден");
+        //model.put("bankAccount", "счет не найден");
 
         //BankAccount findBankAccount2 = bankAccountRepository.findBankAccountByNumberBankAccount(deleteNameAccount);
 //        BankAccount findBankAccount3 = bankAccountRepository.findBankAccountById(deleteNameAccount);
@@ -141,7 +141,7 @@ public class CustomerController {
 
 
 //        if (customerRepository.loadUserByUsername(customerTo) == null) {
-//            model.put("message", customerTo);
+//            model.put("bankAccount", customerTo);
 //            return "redirect:/error";
 //        }
 //        if (user.getAccounts().stream().map(BankAccount::getId).anyMatch(accountTo::equals)) {

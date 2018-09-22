@@ -9,37 +9,37 @@ function getIndex(list, id) {
 }
 
 
-var messageApi = Vue.resource('/message{/id}');
+var messageApi = Vue.resource('/bankAccounts2{/id}');
 
 Vue.component('message-form', {
     props: ['messages', 'messageAttr'],
     data: function() {
         return {
-            text: '',
+            nameAccount: '',
             id: ''
         }
     },
     watch: {
         messageAttr: function(newVal, oldVal) {
-            this.text = newVal.text;
+            this.nameAccount = newVal.nameAccount;
             this.id = newVal.id;
         }
     },
     template:
         '<div>' +
-        '<input type="text" placeholder="Write something" v-model="text" />' +
+        '<input type="nameAccount" placeholder="Write something" v-model="nameAccount" />' +
         '<input type="button" value="Save" @click="save" />' +
         '</div>',
     methods: {
         save: function() {
-            var message = { text: this.text };
+            var message = { nameAccount: this.nameAccount };
 
             if (this.id) {
                 messageApi.update({id: this.id}, message).then(result =>
                 result.json().then(data => {
                     var index = getIndex(this.messages, data.id);
                 this.messages.splice(index, 1, data);
-                this.text = ''
+                this.nameAccount = ''
                 this.id = ''
             })
             )
@@ -58,7 +58,7 @@ Vue.component('message-form', {
 Vue.component('message-row', {
     props: ['message', 'editMethod', 'messages'],
     template: '<div>' +
-        '<i>({{ message.id }})</i> {{ message.text }}' +
+        '<i>({{ message.id }})</i> {{ message.nameAccount }}' +
         '<span style="position: absolute; right: 0">' +
         '<input type="button" value="Edit" @click="edit" />' +
         '<input type="button" value="X" @click="del" />' +

@@ -21,7 +21,7 @@ public class BankAccount {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "account_id", unique = true, nullable = false)
     @Type(type = "com.example.bank.entity.type.AccountIdType")
     private AccountId id;
