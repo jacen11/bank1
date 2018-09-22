@@ -7,31 +7,23 @@
     </div>
 
 <form method="post" action="/transfer">
-    <input name="accountTo" required pattern="[0-9]{1,10}" placeholder="Введите номер счета получателя (1-10 цифр)"
-           class="transfer"/>
-    <input required pattern="^[0-9]+$" name="amount" placeholder="Введите сумму (любое положительное число)"
-           class="transfer">
-    <input name="comment" placeholder="Введите сообщение получателю"
-           class="transfer">
-    <select name="bankAccount">
+    <input name="accountTo"  class="form-control mt-1" required pattern="[0-9]{1,10}" placeholder="Введите номер счета получателя (1-10 цифр)"/>
+    <input required pattern="^[0-9]+$"  class="form-control mt-1" name="amount" placeholder="Введите сумму (любое положительное число)">
+    <input name="comment"  class="form-control mt-1" placeholder="Введите сообщение получателю">
+    <select class="custom-select mt-1" name="bankAccount">
     <#list bankAccounts! as bankAccount>
         <option>${bankAccount.nameAccount}</option>
     <#else>
         <option>Счетов нет</option>
     </#list>
     </select>
-    <button type="submit">Перевести</button>
+    <button type="submit" class="btn btn-primary btn-lg btn-block mt-1">Перевести</button>
 </form>
 
-<style>
-    input.transfer {
-        width: 400px;
-    }
-</style>
+<#--<style>-->
+    <#--input.transfer {-->
+        <#--width: 400px;-->
+    <#--}-->
+<#--</style>-->
 <div> <p>${error?ifExists}</p></div>
-<div><a href="/generation">Получить Json со всеми транзакциями</a></div>
-<div><a href="/bankAccounts">Перейти к управлению счетами</a></div>
-<div>
-    <@l.logout />
-</div>
 </@c.page>
