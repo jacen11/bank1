@@ -1,7 +1,7 @@
 <#include "security.ftl">
 <#import "login.ftl" as l>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
     <a class="navbar-brand" href="/">Банк</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -16,7 +16,7 @@
                 <a class="nav-link" href="/transfer">Переводы</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/accounts.html">Счета</a>
+                <a class="nav-link" href="/bankAccounts">Счета</a>
             </li>
 
         </ul>

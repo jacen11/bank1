@@ -33,10 +33,14 @@ public class CustomerController {
     }
 
     @GetMapping("/transfer")
-    public String test(){
+    public String transfer(){
         return "transfer";
     }
 
+    @GetMapping("/test")
+    public String test3(){
+        return "test";
+    }
 
     @GetMapping("/bankAccounts")
     public String bankAccount(

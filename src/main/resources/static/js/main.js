@@ -26,10 +26,11 @@ Vue.component('message-form', {
         }
     },
     template:
-        '<div>' +
-        '<input type="nameAccount" placeholder="Write something" v-model="nameAccount" />' +
-        '<input type="button" value="Save" @click="save" />' +
-        '</div>',
+         '<div><div class="row">' +
+             '<input type="nameAccount" class="form-control " placeholder="Введите название счета" v-model="nameAccount" />' +'</div>'+
+         '<div class="row">' +
+            '<input type="button" class="btn btn-primary btn-block mt-1" value="Сохранить" @click="save" />' + '</div></div>'
+    ,
     methods: {
         save: function() {
             var message = { nameAccount: this.nameAccount };
@@ -57,12 +58,18 @@ Vue.component('message-form', {
 
 Vue.component('message-row', {
     props: ['message', 'editMethod', 'messages'],
-    template: '<div>' +
-        '<i>({{ message.id }})</i> {{ message.nameAccount }}' +
-        '<span style="position: absolute; right: 0">' +
-        '<input type="button" value="Edit" @click="edit" />' +
-        '<input type="button" value="X" @click="del" />' +
-        '</span>' +
+    template: '<div  class="form-group row">' +
+                '<div class="col">' +
+                    '<label class="col-sm-9 col-form-label">{{ message.nameAccount }}</label>' +
+                '</div>' +
+                // '<span style="position: absolute; right: 0">' +
+                    '<div class="col-sm-2">' +
+                        '<input type="button" class="btn btn-primary mt-1" value="Edit" @click="edit" />' +
+                    '</div>' +
+                    '<div class="col-sm-1">' +
+                        '<input type="button" class="btn btn-primary mt-1" value="X" @click="del" />' +
+                    '</div>' +
+            // '   </span>' +
         '</div>',
     methods: {
         edit: function() {

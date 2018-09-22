@@ -20,10 +20,5 @@
     <button type="submit" class="btn btn-primary btn-lg btn-block mt-1">Перевести</button>
 </form>
 
-<#--<style>-->
-    <#--input.transfer {-->
-        <#--width: 400px;-->
-    <#--}-->
-<#--</style>-->
 <div> <p>${error?ifExists}</p></div>
 </@c.page>
