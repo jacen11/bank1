@@ -16,10 +16,6 @@
     <#if !isRegisterForm><a href="/registration">Добавить клиента</a></#if>
     <button class="btn btn-primary" type="submit"><#if isRegisterForm>Создать<#else>Войти</#if></button>
 
-    <#--<div><label> Номер паспорта (10 цифр) : <input type="text" required pattern="[0-9]{10}" name="username"/> </label></div>-->
-    <#--<div><label> Пароль: <input type="password" name="password"/> </label></div>-->
-    <#--&lt;#&ndash;<input type="hidden" name="_csrf" value="${_csrf.token}" />&ndash;&gt;-->
-    <#--<div><input type="submit" value="Войти"/></div>-->
 </form>
 </#macro>
 

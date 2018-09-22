@@ -5,7 +5,7 @@
 <@c.page>
 
 Генерация отчета
-<form action="generation" method="post">
+<form action="generationReport" method="post">
     <input type="date" name="from">
     <input type="date" name="to">
     <select name="bankAccount">
