@@ -1,5 +1,6 @@
 package com.example.bank.domain;
 
+import com.example.bank.entity.type.AccountId;
 import lombok.Data;
 
 import java.math.BigDecimal;

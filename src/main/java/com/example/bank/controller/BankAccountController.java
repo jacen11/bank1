@@ -1,6 +1,5 @@
 package com.example.bank.controller;
 
-import com.example.bank.domain.AccountId;
 import com.example.bank.entity.BankAccount;
 import com.example.bank.entity.Customer;
 import com.example.bank.repostory.BankAccountRepository;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
 @RestController
-@RequestMapping("bankAccounts2")
+@RequestMapping("/api/account")
 public class BankAccountController {
 
 
@@ -30,29 +29,25 @@ public class BankAccountController {
     public Iterable<BankAccount> list(@AuthenticationPrincipal Customer customer) {
 //        List<BankAccount> accounts = transactionRepo.findByAccount();
         //FIXME при такой реализации ошибка
-        return customer.getAccounts();
+        return customer.getAccounts();//
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public BankAccount getOne(@PathVariable("id") BankAccount bankAccount) {
         return bankAccount;
     }
 
-    private static long counter = 1;
-
     @PostMapping
     public BankAccount create(@AuthenticationPrincipal Customer customer,
                               @RequestBody BankAccount bankAccount) {
-
-        bankAccount.setId( AccountId.of(57,counter++));
         bankAccount.setBalance(BigDecimal.ZERO);
-        bankAccountRepository.save(bankAccount);
         customer.getAccounts().add(bankAccount);
         customerRepository.save(customer);
+        bankAccountRepository.save(bankAccount);
         return bankAccount;
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public BankAccount update(
             @PathVariable("id") BankAccount bankAccountFromDb,
             @RequestBody BankAccount bankAccount
@@ -63,7 +58,7 @@ public class BankAccountController {
         return bankAccountRepository.save(bankAccountFromDb);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") BankAccount bankAccount) {
         bankAccountRepository.delete(bankAccount);
     }

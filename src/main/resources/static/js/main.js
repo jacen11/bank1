@@ -9,7 +9,7 @@ function getIndex(list, id) {
 }
 
 
-var messageApi = Vue.resource('/bankAccounts2{/id}');
+var messageApi = Vue.resource('/api/account/{id}');
 
 Vue.component('message-form', {
     props: ['messages', 'messageAttr'],
@@ -60,10 +60,13 @@ Vue.component('message-row', {
     props: ['message', 'editMethod', 'messages'],
     template: '<div  class="form-group row">' +
                 '<div class="col">' +
-                    '<label class="col-sm-9 col-form-label">{{ message.nameAccount }}</label>' +
+                '<label class="col-form-label">{{ message.id }}</label>' +
                 '</div>' +
                 '<div class="col">' +
-                '<label class="col-sm-2 col-form-label">{{ message.balance}}</label>' +
+                    '<label class="col-form-label">{{ message.nameAccount }}</label>' +
+                '</div>' +
+                '<div class="col">' +
+                '<label class="col-form-label">{{ message.balance}}</label>' +
                 '</div>' +
                 // '<span style="position: absolute; right: 0">' +
                     '<div class="col-sm-2">' +

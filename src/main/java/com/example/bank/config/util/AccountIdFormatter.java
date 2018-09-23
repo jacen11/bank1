@@ -1,6 +1,6 @@
 package com.example.bank.config.util;
 
-import com.example.bank.domain.AccountId;
+import com.example.bank.entity.type.AccountId;
 
 import org.springframework.format.Formatter;
 import java.text.ParseException;

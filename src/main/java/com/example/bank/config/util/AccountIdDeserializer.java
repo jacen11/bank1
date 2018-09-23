@@ -1,6 +1,6 @@
 package com.example.bank.config.util;
 
-import com.example.bank.domain.AccountId;
+import com.example.bank.entity.type.AccountId;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;

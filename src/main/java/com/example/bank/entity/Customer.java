@@ -7,7 +7,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +34,7 @@ public class Customer implements UserDetails {
     @Column(name = "enabled")
     private boolean enabled = true;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(referencedColumnName = "customer_id")
     private List<BankAccount> accounts;
 

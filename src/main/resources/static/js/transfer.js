@@ -1,28 +1,47 @@
 
-var messageApi = Vue.resource('/bankAccounts2{/id}');
+var messageApi = Vue.resource('/api/account/{id}');
 
-Vue.component('messages-list', {
-    props: ['messages'],
+Vue.component('message-form', {
+    props: ['messages', 'messageAttr'],
     data: function() {
         return {
-            message: null
+            nameAccount: '',
+            id: ''
         }
     },
+    // watch: {
+    //     messageAttr: function(newVal, oldVal) {
+    //         this.nameAccount = newVal.nameAccount;
+    //         this.id = newVal.id;
+    //     }
+    // },
     template:
-        '<div style="position: relative; width: 300px;">' +
-        '<message-form :messages="messages" :messageAttr="message" />' +
-        '<message-row v-for="message in messages" :key="message.id" :message="message" editMethod="editMethod" :messages="messages" />' +
-        '</div>',
-    created: function() {
-                                messageApi.get().then(result =>
-                                        result.json().then(data =>
-                                                            data.forEach(message => this.messages.push(message))
-                                                            )
-                                )
-    },
+        '<div><div class="row">' +
+        '<input type="nameAccount" class="form-control " placeholder="Введите название счета" v-model="nameAccount" />' +'</div>'+
+        '<div class="row">' +
+        '<input type="button" class="btn btn-primary btn-block mt-1" value="Сохранить" @click="save" />' + '</div></div>'
+    ,
     methods: {
-        editMethod: function(message) {
-            this.message = message;
+        save: function() {
+            var message = { nameAccount: this.nameAccount };
+
+            if (this.id) {
+                messageApi.update({id: this.id}, message).then(result =>
+                result.json().then(data => {
+                    var index = getIndex(this.messages, data.id);
+                this.messages.splice(index, 1, data);
+                this.nameAccount = ''
+                this.id = ''
+            })
+            )
+            } else {
+                messageApi.save({}, message).then(result =>
+                result.json().then(data => {
+                    this.messages.push(data);
+                this.text = ''
+            })
+            )
+            }
         }
     }
 });

@@ -1,6 +1,6 @@
 package com.example.bank.config.util;
 
-import com.example.bank.domain.AccountId;
+import com.example.bank.entity.type.AccountId;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;

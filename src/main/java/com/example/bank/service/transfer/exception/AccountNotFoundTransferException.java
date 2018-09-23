@@ -1,6 +1,6 @@
 package com.example.bank.service.transfer.exception;
 
-import com.example.bank.domain.AccountId;
+import com.example.bank.entity.type.AccountId;
 import lombok.Getter;
 
 @Getter

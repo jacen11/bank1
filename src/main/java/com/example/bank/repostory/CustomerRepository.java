@@ -1,6 +1,6 @@
 package com.example.bank.repostory;
 
-import com.example.bank.domain.AccountId;
+import com.example.bank.entity.type.AccountId;
 import com.example.bank.entity.Customer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,9 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.Map;
-
-public interface CustomerRepository extends JpaRepository<Customer, Long>, UserDetailsService {
+public interface CustomerRepository extends RefreshableJpaRepository<Customer, Long>, UserDetailsService {
 
     @Override
     default Customer loadUserByUsername(String s) throws UsernameNotFoundException {

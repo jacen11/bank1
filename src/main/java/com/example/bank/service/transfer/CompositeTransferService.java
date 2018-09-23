@@ -1,6 +1,6 @@
 package com.example.bank.service.transfer;
 
-import com.example.bank.domain.AccountId;
+import com.example.bank.entity.type.AccountId;
 import com.example.bank.domain.Transfer;
 import com.example.bank.repostory.CustomerRepository;
 import com.example.bank.service.transfer.exception.TooManyBanksTransferException;

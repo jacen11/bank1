@@ -1,6 +1,5 @@
 package com.example.bank.entity.type;
 
-import com.example.bank.domain.AccountId;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;

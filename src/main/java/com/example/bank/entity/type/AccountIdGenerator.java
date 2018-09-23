@@ -1,6 +1,5 @@
-package com.example.bank.config.util;
+package com.example.bank.entity.type;
 
-import com.example.bank.domain.AccountId;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
@@ -8,9 +7,10 @@ import org.hibernate.id.IdentifierGenerator;
 import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.example.bank.entity.type.AccountId.SIZE;
+
 public class AccountIdGenerator implements IdentifierGenerator {
 
-    static final long SIZE = 8;
 
     @Override
     public Serializable generate(SharedSessionContractImplementor session, Object object) throws HibernateException {
