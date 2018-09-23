@@ -12,7 +12,7 @@
         <div class="col">
             <select name="bankAccount" class="custom-select mt-1">
         <#list bankAccounts! as bankAccount>
-            <option>${bankAccount.nameAccount}</option>
+            <option>${bankAccount.id}</option>
         <#else>
                 <option>Счетов нет</option>
         </#list>

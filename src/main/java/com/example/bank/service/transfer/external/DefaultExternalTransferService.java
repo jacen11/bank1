@@ -6,13 +6,17 @@ import com.example.bank.repostory.BankAccountRepository;
 import com.example.bank.service.transfer.ExternalTransferService;
 import com.example.bank.service.transfer.configuration.BankProperties;
 import com.example.bank.service.transfer.configuration.BanksProperties;
+import com.example.bank.service.transfer.exception.ExternalTransferException;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 import static org.springframework.http.RequestEntity.post;
 
@@ -46,6 +50,9 @@ public class DefaultExternalTransferService implements ExternalTransferService {
         RequestEntity<Transfer> requestEntity = requestBuilder
                 .body(transfer);
         ResponseEntity<TransferResponse> response = rest.exchange(requestEntity, TransferResponse.class);
+        if (response.getStatusCode().is4xxClientError()) {
+            throw new ExternalTransferException();
+        }
 
     }
 

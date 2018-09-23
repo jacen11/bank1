@@ -6,6 +6,7 @@ import com.example.bank.service.transfer.TransferService;
 import com.example.bank.service.transfer.exception.TransferException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -22,7 +23,7 @@ public class TransferController {
     }
 
     @PostMapping
-    public ResponseEntity transfer(@AuthenticationPrincipal Customer customer, @RequestBody Transfer transfer) {
+    public ResponseEntity transfer(@AuthenticationPrincipal Customer customer, @RequestBody @Validated Transfer transfer) {
         transferService.transfer(transfer);
         return ok().build();
     }

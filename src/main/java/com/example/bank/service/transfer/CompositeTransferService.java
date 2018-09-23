@@ -1,6 +1,5 @@
 package com.example.bank.service.transfer;
 
-import com.example.bank.entity.type.AccountId;
 import com.example.bank.domain.Transfer;
 import com.example.bank.repostory.CustomerRepository;
 import com.example.bank.service.transfer.exception.TooManyBanksTransferException;
@@ -44,7 +43,6 @@ public class CompositeTransferService implements TransferService {
      */
     @Override
     public void transfer(final Transfer transfer) {
-        final AccountId fromAccountId = transfer.getFromAccount();
         if (transfer.getToAccount().isInternal()) {
             internalCustomerService.transfer(transfer);
             return;

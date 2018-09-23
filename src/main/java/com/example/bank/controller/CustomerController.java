@@ -1,11 +1,13 @@
 package com.example.bank.controller;
 
-import com.example.bank.entity.AccountTransaction;
 import com.example.bank.entity.BankAccount;
 import com.example.bank.entity.Customer;
+import com.example.bank.entity.type.AccountId;
 import com.example.bank.repostory.BankAccountRepository;
 import com.example.bank.repostory.BankTransactionRepo;
+import com.example.bank.service.report.ReportGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +28,14 @@ public class CustomerController {
 
     private final BankAccountRepository bankAccountRepository;
 
+    private final ReportGenerator reportGenerator;
+
     @Autowired
-    public CustomerController(BankTransactionRepo bankTransactionRepo, BankAccountRepository bankAccountRepository) {
+    public CustomerController(BankTransactionRepo bankTransactionRepo, BankAccountRepository bankAccountRepository, ReportGenerator reportGenerator) {
 
         this.bankTransactionRepo = bankTransactionRepo;
         this.bankAccountRepository = bankAccountRepository;
+        this.reportGenerator = reportGenerator;
     }
 
     @GetMapping("/")
@@ -63,7 +68,7 @@ public class CustomerController {
                                     @RequestParam String bankAccount,
                                     @RequestParam String cash){
 
-        List<BankAccount> bankAccounts = customer.getAccounts().stream().filter(o -> o.getNameAccount().equals(bankAccount)).collect(Collectors.toList());
+        List<BankAccount> bankAccounts = customer.getAccounts().stream().filter(o -> o.getId().toString().equals(bankAccount)).collect(Collectors.toList());
 
        if (!bankAccounts.isEmpty()){
            bankAccounts.get(0).setBalance(BigDecimal.valueOf(Long.parseLong(cash)));
@@ -82,18 +87,13 @@ public class CustomerController {
     }
 
     @PostMapping("/generationReport")
-    public List<AccountTransaction> generationReport(@AuthenticationPrincipal Customer customer,
-                                                     @RequestParam String from,
-                                                     @RequestParam String to,
-                                                     @RequestParam String bankAccount,
-                                                     Map<String, Object> model){
-        //TODO найти аккаунт
-        LocalDate fromDate = LocalDate.parse(from);
-        LocalDate toDate = LocalDate.parse(to);
-
-        List<AccountTransaction> accountTransactions = bankTransactionRepo.findByDateTimeBetween(fromDate.atStartOfDay(),toDate.atStartOfDay());//.stream().filter(p -> p.getAccountFrom().equals(bankAccount) || p.getAccountTo().equals(bankAccount)).collect(Collectors.toList());
-
-        return accountTransactions;
+    public Resource generationReport(@AuthenticationPrincipal Customer customer,
+                                     @RequestParam LocalDate from,
+                                     @RequestParam LocalDate to,
+                                     @RequestParam AccountId bankAccount,
+                                     Map<String, Object> model){
+        Resource report = reportGenerator.generate(from, to, bankAccount);
+        return report;
     }
 
     @GetMapping("/generationReport")
