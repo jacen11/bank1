@@ -2,8 +2,11 @@ package com.example.bank.controller;
 
 import com.example.bank.domain.AccountId;
 import com.example.bank.entity.BankAccount;
+import com.example.bank.entity.Customer;
 import com.example.bank.repostory.BankAccountRepository;
+import com.example.bank.repostory.CustomerRepository;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -15,16 +18,19 @@ public class BankAccountController {
 
     private final BankAccountRepository bankAccountRepository;
 
+    private final CustomerRepository customerRepository;
 
-    public BankAccountController(BankAccountRepository bankAccountRepository) {
+    public BankAccountController(BankAccountRepository bankAccountRepository, CustomerRepository customerRepository) {
         this.bankAccountRepository = bankAccountRepository;
+        this.customerRepository = customerRepository;
     }
 
 
     @GetMapping
-    public Iterable<BankAccount> list() {
+    public Iterable<BankAccount> list(@AuthenticationPrincipal Customer customer) {
 //        List<BankAccount> accounts = transactionRepo.findByAccount();
-        return bankAccountRepository.findAll();
+        //FIXME при такой реализации ошибка
+        return customer.getAccounts();
     }
 
     @GetMapping("{id}")
@@ -35,11 +41,15 @@ public class BankAccountController {
     private static long counter = 1;
 
     @PostMapping
-    public BankAccount create(@RequestBody BankAccount bankAccount) {
+    public BankAccount create(@AuthenticationPrincipal Customer customer,
+                              @RequestBody BankAccount bankAccount) {
 
         bankAccount.setId( AccountId.of(57,counter++));
         bankAccount.setBalance(BigDecimal.ZERO);
-        return bankAccountRepository.save(bankAccount);
+        bankAccountRepository.save(bankAccount);
+        customer.getAccounts().add(bankAccount);
+        customerRepository.save(customer);
+        return bankAccount;
     }
 
     @PutMapping("{id}")
@@ -47,6 +57,7 @@ public class BankAccountController {
             @PathVariable("id") BankAccount bankAccountFromDb,
             @RequestBody BankAccount bankAccount
     ) {
+        //FIXME при редактировании пропадают деньги
         BeanUtils.copyProperties(bankAccount, bankAccountFromDb, "id");
 
         return bankAccountRepository.save(bankAccountFromDb);

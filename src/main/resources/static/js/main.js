@@ -62,6 +62,9 @@ Vue.component('message-row', {
                 '<div class="col">' +
                     '<label class="col-sm-9 col-form-label">{{ message.nameAccount }}</label>' +
                 '</div>' +
+                '<div class="col">' +
+                '<label class="col-sm-2 col-form-label">{{ message.balance}}</label>' +
+                '</div>' +
                 // '<span style="position: absolute; right: 0">' +
                     '<div class="col-sm-2">' +
                         '<input type="button" class="btn btn-primary mt-1" value="Edit" @click="edit" />' +

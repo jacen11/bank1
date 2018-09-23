@@ -28,11 +28,4 @@ public class TransactionController {
         return accountTransaction;
     }
 
-//    @PostMapping("/generation")
-//    public List<AccountTransaction> findByDate(@AuthenticationPrincipal Customer customer,
-//                                               @RequestParam(required = false) LocalDate from,
-//                                               @RequestParam(required = false) LocalDate to) {
-//
-//        return bankTransactionRepo.findByDateTimeBetween(from,to).stream().filter(p -> p.getAccountFrom().equals(customer) || p.getAccountTo().equals(customer)).collect(Collectors.toList());
-//    }
 }

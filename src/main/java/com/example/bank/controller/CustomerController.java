@@ -62,11 +62,11 @@ public class CustomerController {
                                                      @RequestParam String to,
                                                      @RequestParam String bankAccount,
                                                      Map<String, Object> model){
-
+        //TODO найти аккаунт
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
 
-        List<AccountTransaction> accountTransactions = bankTransactionRepo.findByDateTimeBetween(fromDate.atStartOfDay(),toDate.atStartOfDay());//.stream().filter(p -> p.getAccountFrom().equals(customer) || p.getAccountTo().equals(customer)).collect(Collectors.toList());
+        List<AccountTransaction> accountTransactions = bankTransactionRepo.findByDateTimeBetween(fromDate.atStartOfDay(),toDate.atStartOfDay());//.stream().filter(p -> p.getAccountFrom().equals(bankAccount) || p.getAccountTo().equals(bankAccount)).collect(Collectors.toList());
 
         return accountTransactions;
     }
