@@ -75,4 +75,20 @@ public class AccountId implements Serializable {
     public String toString() {
         return get().toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AccountId accountId = (AccountId) o;
+
+        if (!bankId.equals(accountId.bankId)) return false;
+        return id.equals(accountId.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

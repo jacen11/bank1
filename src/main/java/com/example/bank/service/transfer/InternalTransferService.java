@@ -57,7 +57,7 @@ public class InternalTransferService implements TransferService {
         bankAccountRepository.save(fromAccount);
         toAccount.setBalance(toAccount.getBalance().add(transfer.getAmount()));
         bankAccountRepository.save(toAccount);
-        AccountTransaction accountTransaction = new AccountTransaction(fromAccount, toAccount, transfer.getAmount());
+        AccountTransaction accountTransaction = new AccountTransaction(fromAccount, toAccount, transfer.getAmount(), transfer.getComment());
         transactionRepository.save(accountTransaction);
 
     }

@@ -27,9 +27,7 @@ public class BankAccountController {
 
     @GetMapping
     public Iterable<BankAccount> list(@AuthenticationPrincipal Customer customer) {
-//        List<BankAccount> accounts = transactionRepo.findByAccount();
-        //FIXME при такой реализации ошибка
-        return customer.getAccounts();//
+        return customer.getAccounts();
     }
 
     @GetMapping("/{id}")
@@ -41,9 +39,9 @@ public class BankAccountController {
     public BankAccount create(@AuthenticationPrincipal Customer customer,
                               @RequestBody BankAccount bankAccount) {
         bankAccount.setBalance(BigDecimal.ZERO);
+        bankAccountRepository.save(bankAccount);
         customer.getAccounts().add(bankAccount);
         customerRepository.save(customer);
-        bankAccountRepository.save(bankAccount);
         return bankAccount;
     }
 
@@ -52,9 +50,7 @@ public class BankAccountController {
             @PathVariable("id") BankAccount bankAccountFromDb,
             @RequestBody BankAccount bankAccount
     ) {
-        //FIXME при редактировании пропадают деньги
         BeanUtils.copyProperties(bankAccount, bankAccountFromDb, "id");
-
         return bankAccountRepository.save(bankAccountFromDb);
     }
 

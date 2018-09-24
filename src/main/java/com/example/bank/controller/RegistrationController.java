@@ -13,8 +13,13 @@ import java.util.Map;
 
 @Controller
 public class RegistrationController {
+
+    private final CustomerRepository customerRepository;
+
     @Autowired
-    private CustomerRepository customerRepository;
+    public RegistrationController(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     @GetMapping("/registration")
     public String registration() {
@@ -36,3 +41,4 @@ public class RegistrationController {
         return "redirect:/login";
     }
 }
+

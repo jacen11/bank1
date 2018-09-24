@@ -25,11 +25,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/registration", "/static/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .csrf().disable()                                       //временно
-                .formLogin().loginPage("/login").permitAll()//.disable()//.loginPage("/login").permitAll()
+                .csrf().disable()
+                .formLogin().loginPage("/login").permitAll()
                 .and()
-                .logout()
-                ;
+                .logout();
     }
 
     //customerRepository
@@ -38,6 +37,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth
                 .userDetailsService(customerRepository)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance())
-                ;
+        ;
     }
 }

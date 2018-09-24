@@ -7,10 +7,10 @@
 <form action="generationReport" method="post">
     <div class="row">
         <div class="col">
-            <input type="date" class="form-control mt-1" name="from">
+            <input type="date" class="form-control mt-1" name="fromString">
         </div>
         <div class="col">
-            <input type="date" class="form-control mt-1" name="to">
+            <input type="date" class="form-control mt-1" name="toString">
         </div>
         <div class="col">
             <select name="bankAccount" class="custom-select mt-1">

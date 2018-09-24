@@ -37,10 +37,11 @@ public class AccountTransaction {
     public AccountTransaction() {
     }
 
-    public AccountTransaction(BankAccount accountFrom, BankAccount accountTo, BigDecimal cash) {
+    public AccountTransaction(BankAccount accountFrom, BankAccount accountTo, BigDecimal cash, String comment) {
         this.accountFrom = accountFrom;
         this.accountTo = accountTo;
         this.cash = cash;
         this.dateTime = LocalDateTime.now();
+        this.comment = comment;
     }
 }

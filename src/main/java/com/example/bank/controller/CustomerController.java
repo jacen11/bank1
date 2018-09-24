@@ -1,18 +1,18 @@
 package com.example.bank.controller;
 
+import com.example.bank.entity.AccountTransaction;
 import com.example.bank.entity.BankAccount;
 import com.example.bank.entity.Customer;
 import com.example.bank.entity.type.AccountId;
 import com.example.bank.repostory.BankAccountRepository;
 import com.example.bank.repostory.BankTransactionRepo;
-import com.example.bank.service.report.ReportGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -28,14 +28,12 @@ public class CustomerController {
 
     private final BankAccountRepository bankAccountRepository;
 
-    private final ReportGenerator reportGenerator;
 
     @Autowired
-    public CustomerController(BankTransactionRepo bankTransactionRepo, BankAccountRepository bankAccountRepository, ReportGenerator reportGenerator) {
+    public CustomerController(BankTransactionRepo bankTransactionRepo, BankAccountRepository bankAccountRepository) {
 
         this.bankTransactionRepo = bankTransactionRepo;
         this.bankAccountRepository = bankAccountRepository;
-        this.reportGenerator = reportGenerator;
     }
 
     @GetMapping("/")
@@ -44,42 +42,34 @@ public class CustomerController {
     }
 
     @GetMapping("/transfer")
-    public String transfer(){
+    public String transfer() {
         return "transfer";
     }
 
-    @GetMapping("/test")
-    public String test3(){
-        return "test";
-    }
-
     @GetMapping("/bankAccounts")
-    public String bankAccount(
-            @AuthenticationPrincipal Customer user//,
-          //  Map<String, Object> model
-    ) {
-      //  model.put("greeting", "Привет " + user.getUsername());
-
+    public String bankAccount() {
         return "bankAccounts";
     }
 
     @PostMapping("/replenishment")
     public String replenishment(@AuthenticationPrincipal Customer customer,
-                                    @RequestParam String bankAccount,
-                                    @RequestParam String cash){
+                                @RequestParam AccountId bankAccount,
+                                @RequestParam String cash) {
 
-        List<BankAccount> bankAccounts = customer.getAccounts().stream().filter(o -> o.getId().toString().equals(bankAccount)).collect(Collectors.toList());
+        List<BankAccount> bankAccounts = customer.getAccounts().stream().filter(o -> o.getId().equals(bankAccount)).collect(Collectors.toList());
 
-       if (!bankAccounts.isEmpty()){
-           bankAccounts.get(0).setBalance(BigDecimal.valueOf(Long.parseLong(cash)));
-           bankAccountRepository.save(bankAccounts.get(0));
-       }
+        if (!bankAccounts.isEmpty()) {
+            BankAccount tempBankAccount1 = bankAccounts.get(0);
+            BigDecimal balance = tempBankAccount1.getBalance();
+            tempBankAccount1.setBalance(balance.add(BigDecimal.valueOf(Long.parseLong(cash))));
+            bankAccountRepository.save(tempBankAccount1);
+        }
 
         return "replenishment";
     }
 
     @GetMapping("/replenishment")
-    public String getReplenishment(@AuthenticationPrincipal Customer customer, Map<String, Object> model){
+    public String getReplenishment(@AuthenticationPrincipal Customer customer, Map<String, Object> model) {
 
         model.put("bankAccounts", customer.getAccounts());
 
@@ -87,18 +77,28 @@ public class CustomerController {
     }
 
     @PostMapping("/generationReport")
-    public Resource generationReport(@AuthenticationPrincipal Customer customer,
-                                     @RequestParam LocalDate from,
-                                     @RequestParam LocalDate to,
-                                     @RequestParam AccountId bankAccount,
-                                     Map<String, Object> model){
-        Resource report = reportGenerator.generate(from, to, bankAccount);
+    @ResponseBody
+    public List<AccountTransaction> generationReport(@AuthenticationPrincipal Customer customer,
+                                                     @RequestParam String fromString,
+                                                     @RequestParam String toString,
+                                                     @RequestParam AccountId bankAccount,
+                                                     Map<String, Object> model) {
+        LocalDate from = LocalDate.parse(fromString);
+        LocalDate to = LocalDate.parse(toString);
+        BankAccount tempBankAccount = null;
+        for (BankAccount e : customer.getAccounts()) {
+            if (e.getId().equals(bankAccount)) {
+                tempBankAccount = e;
+            }
+        }
+
+        List<AccountTransaction> report = bankTransactionRepo.findByDateTimeBetween(from.atStartOfDay(), to.atStartOfDay(), tempBankAccount);
         return report;
     }
 
     @GetMapping("/generationReport")
     public String openGeneration(@AuthenticationPrincipal Customer customer,
-                             Map<String, Object> model) throws IOException {
+                                 Map<String, Object> model) throws IOException {
         Iterable<BankAccount> bankAccounts = customer.getAccounts();
         model.put("bankAccounts", bankAccounts);
 

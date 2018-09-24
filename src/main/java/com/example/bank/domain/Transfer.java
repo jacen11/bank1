@@ -19,5 +19,6 @@ public class Transfer {
     @NotNull
     private AccountId toAccount;
     private Currency currency;
+    private String comment;
 
 }

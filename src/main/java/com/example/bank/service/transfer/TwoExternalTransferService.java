@@ -14,11 +14,11 @@ import java.util.Collections;
 import java.util.Set;
 
 @Service
-public class CobronExternalTransferService implements ExternalTransferService {
+public class TwoExternalTransferService implements ExternalTransferService {
 
     private final RestOperations rest;
 
-    public CobronExternalTransferService(RestOperations rest) {
+    public TwoExternalTransferService(RestOperations rest) {
         this.rest = rest;
     }
 
