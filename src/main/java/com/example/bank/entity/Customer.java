@@ -38,9 +38,6 @@ public class Customer implements UserDetails {
     @JoinColumn(referencedColumnName = "customer_id")
     private List<BankAccount> accounts;
 
-//    @Column(name = "cash", nullable = true)
-//    private BigDecimal cash;
-
     @Override
     public String toString() {
         return "Customer{" +

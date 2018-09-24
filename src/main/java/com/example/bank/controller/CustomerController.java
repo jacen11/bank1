@@ -92,7 +92,11 @@ public class CustomerController {
             }
         }
 
-        List<AccountTransaction> report = bankTransactionRepo.findByDateTimeBetween(from.atStartOfDay(), to.atStartOfDay(), tempBankAccount);
+        List<AccountTransaction> report = bankTransactionRepo.findByDateTimeBetween(
+                from.atStartOfDay(),
+                to.atStartOfDay(),
+                tempBankAccount);
+
         return report;
     }
 
