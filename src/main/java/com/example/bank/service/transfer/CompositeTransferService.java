@@ -14,6 +14,9 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toSet;
 
+/**
+ * Определение к какому типу перевода относится трансфер
+ */
 @Service
 @Primary
 public class CompositeTransferService implements TransferService {

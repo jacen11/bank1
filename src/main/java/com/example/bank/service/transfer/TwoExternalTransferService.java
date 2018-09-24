@@ -13,6 +13,9 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.Set;
 
+/**
+ * Отправка перевода в банк 2 с нестандартным API
+ */
 @Service
 public class TwoExternalTransferService implements ExternalTransferService {
 

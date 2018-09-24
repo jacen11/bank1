@@ -17,6 +17,9 @@ import java.math.BigDecimal;
 import static com.example.bank.service.transfer.TransferService.INTERNAL_CUSTOMER_SERVICE;
 import static java.util.Objects.requireNonNull;
 
+/**
+ * Сервис для переводов с внутреннего счета
+ */
 @Service(INTERNAL_CUSTOMER_SERVICE)
 public class InternalTransferService implements TransferService {
 

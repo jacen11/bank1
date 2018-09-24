@@ -20,6 +20,9 @@ import java.util.Set;
 
 import static org.springframework.http.RequestEntity.post;
 
+/**
+ * Отправка по умолчанию в другой банк (информация берется из файла application.properties)
+ */
 @Service
 public class DefaultExternalTransferService implements ExternalTransferService {
 
